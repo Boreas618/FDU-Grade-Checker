@@ -141,4 +141,4 @@ if __name__ == '__main__':
         title = "出分: " + new_course
         url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "1" + "&template=html"
         requests.get(url)
-    grade_checker.close(1)
+    grade_checker.close(0)
