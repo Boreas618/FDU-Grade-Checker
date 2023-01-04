@@ -47,7 +47,6 @@ class Fudan:
             "User-Agent": self.UA
         }
 
-        print("◉Login ing——", end="")
         post = self.session.post(
             self.url_login,
             data=data,
