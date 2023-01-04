@@ -21,15 +21,21 @@ class Fudan:
         self.psw = password
 
     def _page_init(self):
+        print("◉Initiating——", end='')
         page_login = self.session.get(self.url_login)
+        print("return status code",
+              page_login.status_code)
         if page_login.status_code == 200:
+            print("◉Initiated——", end="")
             return page_login.text
         else:
+            print("◉Fail to open Login Page, Check your Internet connection\n")
             self.close()
 
     def login(self):
         page_login = self._page_init()
 
+        print("getting tokens")
         data = {
             "username": self.uid,
             "password": self.psw,
@@ -48,6 +54,7 @@ class Fudan:
             "User-Agent": self.UA
         }
 
+        print("◉Login ing——", end="")
         post = self.session.post(
             self.url_login,
             data=data,
@@ -98,13 +105,8 @@ def compare_records(pre: dict, new: dict) -> str:
 
 class GradeChecker(Fudan):
     def get_new_course(self):
-        headers = {
-            "authority": "my.fudan.edu.cn",
-            "path": "/list/bks_xx_cj",
-            "user-agent":self.UA
-        }
 
-        res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj",headers=headers)
+        res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
         course_record: dict = {}
