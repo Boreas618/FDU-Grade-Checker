@@ -98,7 +98,6 @@ def compare_records(pre: dict, new: dict) -> str:
 
 class GradeChecker(Fudan):
     def get_new_course(self):
-	    time.sleep(0.1)
         res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj",verify=False)
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
@@ -110,6 +109,8 @@ class GradeChecker(Fudan):
 
         with open('record.json', 'r') as f:
             previous_data: dict = json.load(f)
+
+        time.sleep(0.1)
 
         if len(previous_data) < len(course_record.keys()):
             new_course = compare_records(previous_data, course_record)
