@@ -7,7 +7,7 @@ on:
     branches: [ master ]
   schedule:
     # run every 10 a.m., which is UTC 2 a.m + 8
-    - cron:  '5 * * * *'
+    - cron:  '0,15,30,45 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - name: update
         run: |
           git config --global user.email "_@_.com"
-          git config --global user.name "Luka Magic"
+          git config --global user.name "Brother Sun"
           git add *
           git commit -m "automatic update of records"
           git push origin main
