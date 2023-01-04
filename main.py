@@ -1,4 +1,5 @@
 import json
+import time
 import re
 import requests
 from sys import exit as sys_exit
@@ -97,6 +98,7 @@ def compare_records(pre: dict, new: dict) -> str:
 
 class GradeChecker(Fudan):
     def get_new_course(self):
+	time.sleep(0.1)
         res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
@@ -128,3 +130,4 @@ if __name__ == '__main__':
         title = "出分: " + new_course
         url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "1" + "&template=html"
         requests.get(url)
+    grade_checker.close(1)
