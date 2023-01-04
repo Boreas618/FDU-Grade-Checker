@@ -19,6 +19,12 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v2
-
+      
+      - name: install1
+        run: pip3 install beautifulsoup4
+      
+      - name: run2
+        run: pip3 install requests
+        
       - name: run
         run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} TOKEN=${{ secrets.TOKEN }} python3 main.py
