@@ -21,21 +21,14 @@ class Fudan:
         self.psw = password
 
     def _page_init(self):
-        print("◉Initiating——", end='')
         page_login = self.session.get(self.url_login)
-        print("return status code",
-              page_login.status_code)
         if page_login.status_code == 200:
-            print("◉Initiated——", end="")
             return page_login.text
         else:
-            print("◉Fail to open Login Page, Check your Internet connection\n")
             self.close()
 
     def login(self):
         page_login = self._page_init()
-
-        print("getting tokens")
         data = {
             "username": self.uid,
             "password": self.psw,
@@ -103,11 +96,19 @@ def compare_records(pre: dict, new: dict) -> str:
             return i
 
 gpa_table = {
-    "A": "A ",
-    "A-": "A- ",
-    "B+": "B+ ",
-    "B": "B",
-    "B-": "B- "
+    "A": "4.0",
+    "A-": "3.7",
+    "B+": "3.3",
+    "B": "3.0",
+    "B-": "2.7",
+    "C+": "2.3",
+    "C": "2.0",
+    "C-": "1.7",
+    "D": "1.3",
+    "D-": "1.0",
+    "F": "F",
+    "P": "P",
+    "NP": "NP"
 }
 
 class GradeChecker(Fudan):
@@ -131,7 +132,7 @@ class GradeChecker(Fudan):
             new_course = compare_records(previous_data, course_record)
             with open('record.json', 'w') as f:
                 json.dump(course_record, f)
-            return new_course + gpa_table[str(course_record[new_course])]
+            return gpa_table[str(course_record[new_course])] + new_course
         else:
             return "None"
 
