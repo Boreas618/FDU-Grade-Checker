@@ -23,8 +23,8 @@ jobs:
       - name: install1
         run: pip3 install beautifulsoup4
       
-      - name: run2
-        run: pip3 install requests pip3 install cryptography==3.4.8 pip3 install pyOpenSSL==21.0.0
+      - name: install2
+        run: pip3 install requests
         
       - name: run
         run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} TOKEN=${{ secrets.TOKEN }} python3 main.py
