@@ -98,8 +98,8 @@ def compare_records(pre: dict, new: dict) -> str:
 
 class GradeChecker(Fudan):
     def get_new_course(self):
-	time.sleep(0.1)
-        res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
+	    time.sleep(0.1)
+        res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj",verify=False)
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
         course_record: dict = {}
