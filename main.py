@@ -5,8 +5,8 @@ import requests
 from sys import exit as sys_exit
 from os import getenv
 from bs4 import BeautifulSoup
-
-requests.adapters.DEFAULT_RETRIES = 5
+from urllib3.exceptions import InsecureRequestWarning
+from urllib3 import disable_warnings
 
 class Fudan:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
@@ -103,7 +103,7 @@ class GradeChecker(Fudan):
             "path": "/list/bks_xx_cj",
             "user-agent":self.UA
         }
-        
+
         res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj",headers=headers)
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
@@ -128,6 +128,8 @@ class GradeChecker(Fudan):
 
 
 if __name__ == '__main__':
+    disable_warnings(InsecureRequestWarning)
+    requests.adapters.DEFAULT_RETRIES = 5
     uid, psw = get_account()
     grade_checker = GradeChecker(uid, psw)
     grade_checker.login()
