@@ -5,6 +5,7 @@ from sys import exit as sys_exit
 from os import getenv
 from bs4 import BeautifulSoup
 
+requests.adapters.DEFAULT_RETRIES = 5
 
 class Fudan:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
