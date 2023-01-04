@@ -102,6 +102,13 @@ def compare_records(pre: dict, new: dict) -> str:
         if not pre.keys().__contains__(i):
             return i
 
+gpa_table = {
+    "A": "A ",
+    "A-": "A- ",
+    "B+": "B+ ",
+    "B": "B",
+    "B-": "B- "
+}
 
 class GradeChecker(Fudan):
     def get_new_course(self):
@@ -124,7 +131,7 @@ class GradeChecker(Fudan):
             new_course = compare_records(previous_data, course_record)
             with open('record.json', 'w') as f:
                 json.dump(course_record, f)
-            return new_course + " " + str(course_record[new_course])
+            return new_course + gpa_table[str(course_record[new_course])]
         else:
             return "None"
 
@@ -139,5 +146,5 @@ if __name__ == '__main__':
     if not new_course == "None":
         token = getenv("TOKEN")
         title = "出分: " + new_course
-        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "1" + "&template=html"
+        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + str(time.time()) + "&template=html"
         requests.get(url)
