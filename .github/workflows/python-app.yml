@@ -27,3 +27,9 @@ jobs:
         
       - name: run
         run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} TOKEN=${{ secrets.TOKEN }} python3 main.py
+      
+      - name: update
+        run: |
+          git add *
+          git commit -m "automatic update of records"
+          git push origin main
