@@ -25,6 +25,6 @@
 
 通过 GitHub Action, 该脚本将每隔5分钟查询一次你的期末成绩，并在有新一门课程出分时通过微信提醒你。
 
-5. 建议[关闭Action的邮件通知](https://github.com/settings/notifications)，否则你每天会收到几十封Github的邮件🤡
+5. 建议[关闭Action的邮件通知](https://github.com/settings/notifications)，否则你每天会收到数百封Github的邮件🤡
 
 <img width="809" alt="Screenshot 2023-01-05 at 6 45 51 AM" src="https://user-images.githubusercontent.com/98612013/210664207-2e6aa917-eecf-44c7-b3d7-1f3919f7e77b.png">
