@@ -23,7 +23,7 @@
 
 <img width="787" alt="Screenshot 2023-01-05 at 6 24 01 AM" src="https://user-images.githubusercontent.com/98612013/210661446-d0ff335c-6f54-4dcc-8ae8-83eae1c83279.png">
 
-通过 GitHub Action, 该脚本将每隔15分钟查询一次你的期末成绩，并在有新一门课程出分时通过微信提醒你。
+通过 GitHub Action, 该脚本将每隔5分钟查询一次你的期末成绩，并在有新一门课程出分时通过微信提醒你。
 
 5. 建议[关闭Action的邮件通知](https://github.com/settings/notifications)，否则你每天会收到几十封Github的邮件🤡
 
