@@ -1,6 +1,6 @@
 # FDU_grade_checker
 
-本项目受[pafd-automated](https://github.com/FDUCSLG/pafd-automated)启发
+本项目受[pafd-automated](https://github.com/FDUCSLG/pafd-automated)启发。
 
 每隔5分钟自动查询你的期末成绩，如有新的一门课程出分，则通过微信推送通知。
 
@@ -14,7 +14,10 @@
 
 3. 然后在你 Fork 的副本中，依次点击 Settings, Secrets , Actions 和 New repository secret
 
-> 注意：务必检查record.json的初始内容为{}，否则请修改其内容为{}
+> 注意：请务必确认record.json的初始内容为{}，否则请修改其内容为{}
+> 
+> <img width="90" alt="Screenshot 2023-01-05 at 11 44 45 PM" src="https://user-images.githubusercontent.com/98612013/210821671-d4b40c5b-e629-4501-8fd5-cb1684ac04db.png">
+
 
 4. 新建如下Secrets，其中STD_ID为你的学号，PASSWORD为你的密码，TOKEN为第一步获取的token
 
