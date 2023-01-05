@@ -12,11 +12,11 @@
 
 2. 注册Github账号，Fork此仓库
 
-3. 然后在你 Fork 的副本中，依次点击 Settings, Secrets , Actions 和 New repository secret
-
 > 注意：请务必确认record.json的初始内容为{}，否则请修改其内容为{}
 > 
 > <img width="90" alt="Screenshot 2023-01-05 at 11 44 45 PM" src="https://user-images.githubusercontent.com/98612013/210821671-d4b40c5b-e629-4501-8fd5-cb1684ac04db.png">
+
+3. 然后在你 Fork 的副本中，依次点击 Settings, Secrets , Actions 和 New repository secret
 
 
 4. 新建如下Secrets，其中STD_ID为你的学号，PASSWORD为你的密码，TOKEN为第一步获取的token
