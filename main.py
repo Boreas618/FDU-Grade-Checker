@@ -9,7 +9,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
 
-class Fudan:
+class UISAuth:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
 
     url_login = 'https://uis.fudan.edu.cn/authserver/login?service=https://my.fudan.edu.cn/list/bks_xx_cj'
@@ -55,24 +55,18 @@ class Fudan:
             allow_redirects=False)
 
         if post.status_code == 302:
-            print("登录成功\n")
+            print("Login successfully\n")
         else:
-            print("登录失败，请检查账号信息")
+            print("Login failed\n")
             self.close()
 
     def logout(self):
         exit_url = 'https://uis.fudan.edu.cn/authserver/logout?service=/authserver/login'
         expire = self.session.get(exit_url).headers.get('Set-Cookie')
 
-        if '01-Jan-1970' in expire:
-            print("登出完毕")
-        else:
-            print("登出异常")
-
     def close(self, exit_code=0):
         self.logout()
         self.session.close()
-        print("关闭会话")
         sys_exit(exit_code)
 
 
@@ -123,7 +117,7 @@ gpa_table = {
 }
 
 
-class GradeChecker(Fudan):
+class GradeChecker(UISAuth):
     def get_new_course(self):
         res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
         soup = BeautifulSoup(res.text)
@@ -157,6 +151,5 @@ if __name__ == '__main__':
     if not new_course == "None":
         token = getenv("TOKEN")
         title = "出分: " + new_course
-        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + str(
-            time.time()) + "&template=html"
+        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "&template=html"
         requests.get(url)
