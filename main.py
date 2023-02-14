@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
+
 class Fudan:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
 
@@ -89,11 +90,22 @@ class Course:
         self.grade = grade
 
 
-def compare_records(pre: dict, new: dict) -> str:
+# Find a course that has just released
+# Notice: we suppose that there will be no more than 1 newly released course during the consecutive queries
+def find_newly_released_course(pre: dict, new: dict) -> str:
     for i in new.keys():
         if not pre.keys().__contains__(i):
             return i
 
+
+# Find a course the grade of which has changed since last query
+def find_updated_course(pre: dict, new: dict) -> str:
+    for i in new.keys():
+        if pre[i] != new[i]:
+            return i
+
+
+# Due to a curious bug(?) of the push platform we choose(for the grade "B+", the "+" will not show), we adopt a gpa_table to address this issue.
 gpa_table = {
     "A": "4.0",
     "A-": "3.7",
@@ -110,30 +122,29 @@ gpa_table = {
     "NP": "NP"
 }
 
+
 class GradeChecker(Fudan):
     def get_new_course(self):
-
         res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
         soup = BeautifulSoup(res.text)
         td = soup.find("tbody").find_all("td")
-        course_record: dict = {}
+        current_course_record: dict = {}
 
         for i in range(3, len(td), 6):
             name = td[i].text
-            course_record[name] = td[i + 2].text
+            current_course_record[name] = td[i + 2].text
 
-        with open('record.json', 'r') as f:
+        with open('record.json', 'r+') as f:
             previous_data: dict = json.load(f)
-
-        time.sleep(0.1)
-
-        if len(previous_data) < len(course_record.keys()):
-            new_course = compare_records(previous_data, course_record)
-            with open('record.json', 'w') as f:
-                json.dump(course_record, f)
-            return gpa_table[str(course_record[new_course])] + new_course
-        else:
-            return "None"
+            time.sleep(0.1)
+            if len(previous_data) < len(current_course_record.keys()):
+                newly_released_course = find_newly_released_course(previous_data, current_course_record)
+                json.dump(current_course_record, f)
+                return gpa_table[str(current_course_record[newly_released_course])] + newly_released_course
+            elif len(previous_data) == len(current_course_record.keys()):
+                updated_course = find_updated_course(previous_data, current_course_record)
+                json.dump(current_course_record, f)
+                return gpa_table[str(current_course_record[updated_course])] + updated_course
 
 
 if __name__ == '__main__':
@@ -146,5 +157,6 @@ if __name__ == '__main__':
     if not new_course == "None":
         token = getenv("TOKEN")
         title = "出分: " + new_course
-        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + str(time.time()) + "&template=html"
+        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + str(
+            time.time()) + "&template=html"
         requests.get(url)
