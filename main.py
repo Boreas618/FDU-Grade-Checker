@@ -62,7 +62,7 @@ class UISAuth:
 
     def logout(self):
         exit_url = 'https://uis.fudan.edu.cn/authserver/logout?service=/authserver/login'
-        expire = self.session.get(exit_url).headers.get('Set-Cookie')
+        self.session.get(exit_url).headers.get('Set-Cookie')
 
     def close(self, exit_code=0):
         self.logout()
@@ -74,7 +74,6 @@ def get_account():
     uid = getenv("STD_ID")
     psw = getenv("PASSWORD")
     if uid != None and psw != None:
-        print("从环境变量中获取了用户名和密码！")
         return uid, psw
 
 
