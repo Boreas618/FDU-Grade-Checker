@@ -1,22 +1,20 @@
-# FDU_grade_checker
-
-This project is inspired by [pafd-automated](https://github.com/FDUCSLG/pafd-automated).
+# FDU-grade-checker
 
 This Python script queries your final grades every 5 minutes. Once the grade of a new course is released, a notification will be pushed to your WeChat.
 
 # Getting started
 
-1. Sign up for [pushplus](http://www.pushplus.plus) and get your own token
+1. Sign up for [pushplus](http://www.pushplus.plus) and get your own token.
 
 <img width="295" alt="Screenshot 2023-01-05 at 6 22 31 AM" src="https://user-images.githubusercontent.com/98612013/210661348-2783bb0f-f6dd-4099-b5b4-ee00cdcb7a92.png">
 
-2. Sign up for Github and fork this repository
+2. Sign up for Github and fork this repository.
 
 > Notice: make sure that the initial content of record.json is {}. Otherwise you need to alter its content with {}
 >
 > <img width="90" alt="Screenshot 2023-01-05 at 11 44 45 PM" src="https://user-images.githubusercontent.com/98612013/210821671-d4b40c5b-e629-4501-8fd5-cb1684ac04db.png">
 
-3. In your repository, click on the button Settings, Secrets , Actions and New repository secret consecutively
+3. In your repository, click on the button Settings, Secrets , Actions and New repository secret consecutively.
 
 4. Create the secrets below: STD_ID is your student id. TOKEN is the token you got in the first step.
 
