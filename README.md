@@ -1,8 +1,8 @@
-# FDU-grade-checker
+# FDU-Grade-Checker
 
 [English Version](https://github.com/Boreas618/FDU-grade-checker/blob/main/README_EN.md)
 
-每隔5分钟自动查询你的期末成绩，如有新的一门课程出分，则通过微信推送通知。
+每隔5分钟自动从ehall查询期末成绩，如有新的一门课程出分，则通过微信推送通知。
 
 # 使用方法 Getting started
 
