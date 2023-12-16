@@ -86,6 +86,7 @@ class GradeChecker(UISAuth):
         self.my_gpa = 0.0
         self.mid = 0.0
         self.avg = 0.0
+        self.rank = 0.0
 
     def req(self):
         res = self.session.post("https://jwfw.fudan.edu.cn/eams/myActualGpa!search.action")
@@ -104,13 +105,14 @@ class GradeChecker(UISAuth):
             self.gpa_table.append(row_data)
     
     def stat(self):
-        for r in self.gpa_table:
+        for i, r in enumerate(self.gpa_table):
             self.avg += float(r[5])
             if r[0] != '****':
                 self.my_gpa = float(r[5])
+                self.rank = float(i + 1)
         self.avg = self.avg / len(self.gpa_table)
         self.mid = float(self.gpa_table[int(len(self.gpa_table) / 2)][5])
-        return self.my_gpa, self.avg, self.mid
+        return self.my_gpa, self.avg, self.mid, self.rank
             
         
 if __name__ == '__main__':
@@ -118,16 +120,16 @@ if __name__ == '__main__':
     gc = GradeChecker(uid, psw)
     gc.login()
     gc.req()
-    my_gpa, avg, mid = gc.stat()
-    print(my_gpa)
+    my_gpa, avg, mid, rk = gc.stat()
     gc.close()
     try:
-        old_my, old_avg, old_mid = read(psw)
+        old_my, old_avg, old_mid, old_rk = read(psw)
     except Exception:
-        old_my, old_avg, old_mid = 0.0, 0.0, 0.0
-    if old_my != my_gpa:
-        save(my_gpa, avg, mid, psw)
+        old_my, old_avg, old_mid, old_rk = 0.0, 0.0, 0.0, 0.0
+    if old_my != my_gpa or old_rk != rk:
+        print(old_my, my_gpa)
+        save(my_gpa, avg, mid, rk, psw)
         token = getenv("TOKEN")
         title = "GPA changed: " + str(my_gpa) + " "
-        url = "http://www.pushplus.plus/send/" + token + "?title=" + title + "&content=" + "&template=html"
+        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + f"排名：{int(old_rk)} -> {int(rk)}"+"&template=html"
         requests.get(url)
