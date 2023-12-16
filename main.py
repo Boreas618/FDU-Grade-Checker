@@ -119,6 +119,7 @@ if __name__ == '__main__':
     gc.login()
     gc.req()
     my_gpa, avg, mid = gc.stat()
+    print(my_gpa)
     gc.close()
     old_my, old_avg, old_mid = read(psw)
     if old_my != my_gpa:
