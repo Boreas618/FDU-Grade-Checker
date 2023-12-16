@@ -126,5 +126,5 @@ if __name__ == '__main__':
         save(my_gpa, avg, mid, psw)
         token = getenv("TOKEN")
         title = "GPA changed: " + str(my_gpa) + " "
-        url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "&template=html"
+        url = "http://www.pushplus.plus/send/" + token + "?title=" + title + "&content=" + "&template=html"
         requests.get(url)
