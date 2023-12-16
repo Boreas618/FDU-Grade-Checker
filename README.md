@@ -2,7 +2,7 @@
 
 [English Version](https://github.com/Boreas618/FDU-grade-checker/blob/main/README_EN.md)
 
-该脚本依靠Github Action，每隔一段时间向复旦大学教务服务系统请求GPA数据，与仓库中加密存储的历史信息比对，当GPA数据发生变动时可通过微信通知制定用户。
+该脚本依靠Github Action，每隔一段时间向复旦大学教务服务系统请求GPA数据，与仓库中加密存储的历史信息比对，当GPA数据发生变动时可通过微信通知指定用户。
 
 ## 使用方法
 
