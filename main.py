@@ -1,18 +1,13 @@
-import json
-import time
+from os import getenv
 import re
 import requests
-from sys import exit as sys_exit
-from os import getenv
 from bs4 import BeautifulSoup
-from urllib3.exceptions import InsecureRequestWarning
-from urllib3 import disable_warnings
-
+from persistence import save, read
 
 class UISAuth:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
 
-    url_login = 'https://uis.fudan.edu.cn/authserver/login?service=https://my.fudan.edu.cn/list/bks_xx_cj'
+    url_login = 'https://uis.fudan.edu.cn/authserver/login?service=http://jwfw.fudan.edu.cn/eams/home.action'
 
     def __init__(self, uid, password):
         self.session = requests.session()
@@ -33,7 +28,7 @@ class UISAuth:
         data = {
             "username": self.uid,
             "password": self.psw,
-            "service": "https://my.fudan.edu.cn/list/bks_xx_cj"
+            "service": "http://jwfw.fudan.edu.cn/eams/home.action"
         }
 
         result = re.findall(
@@ -45,8 +40,15 @@ class UISAuth:
             "Host": "uis.fudan.edu.cn",
             "Origin": "https://uis.fudan.edu.cn",
             "Referer": self.url_login,
-            "User-Agent": self.UA
+            "User-Agent": self.UA,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+            "Cache-Control": "max-age=0"
         }
+
 
         post = self.session.post(
             self.url_login,
@@ -55,6 +57,7 @@ class UISAuth:
             allow_redirects=False)
 
         if post.status_code == 302:
+            print(post.text)
             print("Login successfully\n")
         else:
             print("Login failed\n")
@@ -64,10 +67,9 @@ class UISAuth:
         exit_url = 'https://uis.fudan.edu.cn/authserver/logout?service=/authserver/login'
         self.session.get(exit_url).headers.get('Set-Cookie')
 
-    def close(self, exit_code=0):
+    def close(self):
         self.logout()
         self.session.close()
-        sys_exit(exit_code)
 
 
 def get_account():
@@ -77,78 +79,51 @@ def get_account():
         return uid, psw
 
 
-class Course:
-    def __init__(self, name, grade):
-        self.name = name
-        self.grade = grade
-
-
-# Find a course that has just released
-# Notice: we suppose that there will be no more than 1 newly released course during the consecutive queries
-def find_newly_released_course(pre: dict, new: dict) -> str:
-    for i in new.keys():
-        if not pre.keys().__contains__(i):
-            return i
-
-
-# Find a course the grade of which has changed since last query
-def find_updated_course(pre: dict, new: dict) -> str:
-    for i in new.keys():
-        if pre[i] != new[i]:
-            return i
-
-
-# Due to a curious bug(?) of the push platform we choose(for the grade "B+", the "+" will not show), we adopt a gpa_table to address this issue.
-gpa_table = {
-    "A": "4.0",
-    "A-": "3.7",
-    "B+": "3.3",
-    "B": "3.0",
-    "B-": "2.7",
-    "C+": "2.3",
-    "C": "2.0",
-    "C-": "1.7",
-    "D": "1.3",
-    "D-": "1.0",
-    "F": "F",
-    "P": "P",
-    "NP": "NP"
-}
-
-
 class GradeChecker(UISAuth):
-    def get_new_course(self):
-        res = self.session.get("https://my.fudan.edu.cn/list/bks_xx_cj")
-        soup = BeautifulSoup(res.text)
-        td = soup.find("tbody").find_all("td")
-        current_course_record: dict = {}
+    def __init__(self, uid, password):
+        super().__init__(uid, password)
+        self.gpa_table = []
+        self.my_gpa = 0.0
+        self.mid = 0.0
+        self.avg = 0.0
 
-        for i in range(3, len(td), 6):
-            name = td[i].text
-            current_course_record[name] = td[i + 2].text
+    def req(self):
+        res = self.session.post("https://jwfw.fudan.edu.cn/eams/myActualGpa!search.action")
 
-        with open('record.json', 'r+') as f:
-            previous_data: dict = json.load(f)
-            time.sleep(0.1)
-            if len(previous_data) < len(current_course_record.keys()):
-                newly_released_course = find_newly_released_course(previous_data, current_course_record)
-                json.dump(current_course_record, f)
-                return gpa_table[str(current_course_record[newly_released_course])] + newly_released_course
-            elif len(previous_data) == len(current_course_record.keys()):
-                updated_course = find_updated_course(previous_data, current_course_record)
-                json.dump(current_course_record, f)
-                return gpa_table[str(current_course_record[updated_course])] + updated_course
+        if "重复登录" in res.text:
+            soup = BeautifulSoup(res.text, 'html.parser')
+            href = soup.find('a')['href']
+            res = self.session.post(href)
 
-
+        soup = BeautifulSoup(res.text, 'html.parser')
+        rows = soup.find_all('tr')
+        
+        for row in rows[1:]:
+            columns = row.find_all('td')
+            row_data = [col.get_text() for col in columns]
+            self.gpa_table.append(row_data)
+    
+    def stat(self):
+        for r in self.gpa_table:
+            self.avg += float(r[5])
+            if r[0] != '****':
+                self.my_gpa = float(r[5])
+        self.avg = self.avg / len(self.gpa_table)
+        self.mid = float(self.gpa_table[int(len(self.gpa_table) / 2)][5])
+        return self.my_gpa, self.avg, self.mid
+            
+        
 if __name__ == '__main__':
-    disable_warnings(InsecureRequestWarning)
-    requests.adapters.DEFAULT_RETRIES = 5
     uid, psw = get_account()
-    grade_checker = GradeChecker(uid, psw)
-    grade_checker.login()
-    new_course = grade_checker.get_new_course()
-    if not new_course == "None":
+    gc = GradeChecker(uid, psw)
+    gc.login()
+    gc.req()
+    my_gpa, avg, mid = gc.stat()
+    gc.close()
+    old_my, old_avg, old_mid = read(psw)
+    if old_my != my_gpa:
+        save(my_gpa, avg, mid, psw)
         token = getenv("TOKEN")
-        title = "出分: " + new_course
+        title = "GPA changed: " + str(my_gpa) + " "
         url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + "&template=html"
         requests.get(url)
