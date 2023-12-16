@@ -121,7 +121,10 @@ if __name__ == '__main__':
     my_gpa, avg, mid = gc.stat()
     print(my_gpa)
     gc.close()
-    old_my, old_avg, old_mid = read(psw)
+    try:
+        old_my, old_avg, old_mid = read(psw)
+    except Exception:
+        old_my, old_avg, old_mid = 0.0, 0.0, 0.0
     if old_my != my_gpa:
         save(my_gpa, avg, mid, psw)
         token = getenv("TOKEN")
