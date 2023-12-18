@@ -15,10 +15,7 @@ def read(password):
                 return 0.0, 0.0, 0.0, 0.0
             key = generate_key(password)
             decrypted = decrypt(text, key)
-            try:
-                stats = decrypted.split('-')
-            except Exception:
-                return 0.0, 0.0, 0.0, 0.0
+            stats = decrypted.split('-')
             return float(stats[0]), float(stats[1]), float(stats[2]), float(stats[3])
-    except FileNotFoundError:
+    except Exception:
         return 0.0, 0.0, 0.0, 0.0
