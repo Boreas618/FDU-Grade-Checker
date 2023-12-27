@@ -109,7 +109,7 @@ class GradeChecker(UISAuth):
             self.avg += float(r[5])
             if r[0] != '****':
                 self.my_gpa = float(r[5])
-                self.rank = float(i + 1)
+                self.rank = float(r[7])
         self.avg = self.avg / len(self.gpa_table)
         self.mid = float(self.gpa_table[int(len(self.gpa_table) / 2)][5])
         return self.my_gpa, self.avg, self.mid, self.rank
