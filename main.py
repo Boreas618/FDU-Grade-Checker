@@ -130,3 +130,4 @@ if __name__ == '__main__':
         title = "GPA " + str(old_my) + "->" + str(my_gpa)
         url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + f"排名：{int(old_rk)} -> {int(rk)}"+"&template=html"
         requests.get(url)
+        print('update')

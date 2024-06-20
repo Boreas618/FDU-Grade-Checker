@@ -1,34 +1,36 @@
-name: Go
+name: GPA Checker
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   schedule:
-    - cron:  '0,5,10,15,20,25,30,35,40,45,50,55 * * * *'
+    - cron: "0,5,10,15,20,25,30,35,40,45,50,55 * * * *"
   workflow_dispatch:
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-20.04
     steps:
-
       - name: Check out code
         uses: actions/checkout@v2
-      
-      - name: install
+
+      - name: Install dependencies
         run: |
           pip3 install cryptography
           pip3 install beautifulsoup4
           pip3 install requests
-        
-      - name: run
-        run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} TOKEN=${{ secrets.TOKEN }} python3 main.py
-      
-      - name: update
+
+      - name: Run Python script and get result
+        id: run_script
+        run: |
+          STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} TOKEN=${{ secrets.TOKEN }} python3 main.py > result.txt
+          echo "RESULT=$(cat result.txt)" >> $GITHUB_ENV
+
+      - name: Conditional update
+        if: contains(env.RESULT, 'update')
         run: |
           git config --global user.email "21307130094@m.fudan.edu.cn"
           git config --global user.name "Boreas618"
