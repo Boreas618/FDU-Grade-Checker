@@ -57,10 +57,11 @@ class UISAuth:
             allow_redirects=False)
 
         if post.status_code == 302:
-            print(post.text)
-            print("Login successfully\n")
+            pass
+            # print(post.text)
+            # print("Login successfully\n")
         else:
-            print("Login failed\n")
+            # print("Login failed\n")
             self.close()
 
     def logout(self):
