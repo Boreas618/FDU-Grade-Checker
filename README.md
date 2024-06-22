@@ -6,7 +6,7 @@
 
 ## 使用方法
 
-1. 注册[推送加](http://www.pushplus.plus)，获取自己的token 
+1. 注册[推送加](http://www.pushplus.plus)，获取自己的token (token同时会作为加密算法秘钥，若不希望暴露自己的排名，请妥善保管)
 
 <center><img width="295" alt="Screenshot 2023-01-05 at 6 22 31 AM" src="https://user-images.githubusercontent.com/98612013/210661348-2783bb0f-f6dd-4099-b5b4-ee00cdcb7a92.png"></center>
 
