@@ -118,16 +118,16 @@ class GradeChecker(UISAuth):
         
 if __name__ == '__main__':
     uid, psw = get_account()
+    token = getenv("TOKEN")
     gc = GradeChecker(uid, psw)
     gc.login()
     gc.req()
     my_gpa, avg, mid, rk = gc.stat()
     gc.close()
     
-    old_my, old_avg, old_mid, old_rk = read(psw)
+    old_my, old_avg, old_mid, old_rk = read(token)
     if old_my != my_gpa or old_rk != rk:
-        save(my_gpa, avg, mid, rk, psw)
-        token = getenv("TOKEN")
+        save(my_gpa, avg, mid, rk, token)
         title = "GPA " + str(old_my) + "->" + str(my_gpa)
         url = "http://www.pushplus.plus/send?token=" + token + "&title=" + title + "&content=" + f"排名：{int(old_rk)} -> {int(rk)}"+"&template=html"
         requests.get(url)
