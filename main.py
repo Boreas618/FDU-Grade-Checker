@@ -77,6 +77,8 @@ class Snapshot:
         self.class_mid = class_mid
     
     def compare(self, another_snapshot):
+        if another_snapshot is None:
+            return True
         return self.gpa != another_snapshot.gpa or \
             self.rank != another_snapshot.rank or \
                 self.credits != another_snapshot.credits
