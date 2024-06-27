@@ -2,7 +2,6 @@ from os import getenv
 import re
 import requests
 from bs4 import BeautifulSoup
-from security import generate_key, encrypt, decrypt
 from cryptography.fernet import Fernet
 import base64
 import hashlib
