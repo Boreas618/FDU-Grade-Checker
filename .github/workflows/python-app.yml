@@ -35,5 +35,5 @@ jobs:
           git config --global user.email "21307130094@m.fudan.edu.cn"
           git config --global user.name "Boreas618"
           git add *
-          git commit -m "automatic update of records"
+          git commit -m "Automatic update of records"
           git push origin main
