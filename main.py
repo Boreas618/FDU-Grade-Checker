@@ -167,7 +167,7 @@ if __name__ == '__main__':
     old_snapshot = read_snapshot(token)
     if snapshot.compare(old_snapshot):
         save_snapshot(snapshot, token)
-        title = f'GPA {str(old_snapshot.gpa)} -> {str(snapshot.gpa)}'
-        url = f'http://www.pushplus.plus/send?token={token}&title={title}&content=排名：{int(old_snapshot.rank)} -> {int(snapshot.rank)}&template=html'
+        title = f'GPA {str(old_snapshot.gpa if old_snapshot is not None else 0.0)} -> {str(snapshot.gpa)}'
+        url = f'http://www.pushplus.plus/send?token={token}&title={title}&content=排名：{int(old_snapshot.rank if old_snapshot is not None else 0.0)} -> {int(snapshot.rank)}&template=html'
         requests.get(url)
         print('update')
