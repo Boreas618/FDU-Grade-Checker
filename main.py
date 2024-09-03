@@ -6,6 +6,7 @@ from cryptography.fernet import Fernet
 import base64
 import hashlib
 
+
 class UISAuth:
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0"
 
@@ -67,7 +68,8 @@ class UISAuth:
     def close(self):
         self.logout()
         self.session.close()
-        
+
+
 class Snapshot:
     def __init__(self, gpa=0.0, rank=0.0, credits=0.0, class_avg=0.0, class_mid=0.0):
         self.gpa = gpa
