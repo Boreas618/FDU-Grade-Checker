@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0/20 8-23/1 * * *"
   workflow_dispatch:
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       - name: Conditional update
         if: contains(env.RESULT, 'update')
         run: |
-          git config --global user.email "21307130094@m.fudan.edu.cn"
+          git config --global user.email "suny21@m.fudan.edu.cn"
           git config --global user.name "Boreas618"
           git add *
           git commit -m "Automatic update of records"
